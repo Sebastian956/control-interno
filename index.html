@@ -1,0 +1,982 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Portal de maqueta de Control Interno: planes de remediación, ficha de agentes de ventas y detección de emisores de licencias médicas. Datos ficticios.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20fill='%231E3A6F'%20d='M12%202l8%203v6c0%205-3.4%209.3-8%2011-4.6-1.7-8-6-8-11V5l8-3z'/%3E%3C/svg%3E">
+<style>
+  /* Base equivalente a la que aplicaba el visor de artifacts */
+  :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  body{margin:0;font:14px system-ui,-apple-system,sans-serif}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+<title>Portal Control Interno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Portal de dos columnas: navegacion persistente a la izquierda, modulo activo a la derecha */
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --surface-2:#EDF0F4;
+  --fg:#1A1E26; --fg-2:#49505C; --muted:#7A828F;
+  --line:#DFE3E9; --line-2:#C9CFD8;
+  --accent:#1E3A6F; --accent-2:#3D6098; --accent-soft:#E7ECF4;
+  --warn:#B4541F; --warn-soft:#FAEFE7;
+  --ok:#3D6B33; --ok-soft:#EBF2E7;
+  --neutral-bar:#9FB0C8;
+  --font-ui:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --font-data:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:4px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13161B; --surface:#1A1E25; --surface-2:#222731;
+  --fg:#E6E9EE; --fg-2:#AFB7C3; --muted:#848D9B;
+  --line:#2A2F39; --line-2:#3A414E;
+  --accent:#8FAED9; --accent-2:#6B8CBC; --accent-soft:#1E2733;
+  --warn:#DD8A52; --warn-soft:#2A2018;
+  --ok:#7FA96F; --ok-soft:#1C2419;
+  --neutral-bar:#54637A;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#13161B; --surface:#1A1E25; --surface-2:#222731;
+  --fg:#E6E9EE; --fg-2:#AFB7C3; --muted:#848D9B;
+  --line:#2A2F39; --line-2:#3A414E;
+  --accent:#8FAED9; --accent-2:#6B8CBC; --accent-soft:#1E2733;
+  --warn:#DD8A52; --warn-soft:#2A2018;
+  --ok:#7FA96F; --ok-soft:#1C2419;
+  --neutral-bar:#54637A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-ui);font-size:14px;line-height:1.5;margin:0}
+h1,h2,h3{margin:0;font-weight:600;text-wrap:balance}
+p{margin:0}
+table{border-collapse:collapse;width:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100%}
+.nav{background:var(--surface);border-right:1px solid var(--line);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:14px;padding-block:22px 24px}
+.navinner{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px)}
+.brand{font-size:15px;font-weight:600;letter-spacing:-.1px;line-height:1.3}
+.brand span{display:block;font-size:11px;font-weight:400;color:var(--muted);letter-spacing:.3px;margin-top:3px}
+.navlist{display:flex;flex-direction:column;gap:1px;margin-top:24px}
+.navlist button{background:none;border:0;border-radius:var(--r);text-align:left;padding:8px 10px;
+  font-size:13.5px;color:var(--fg-2);display:flex;align-items:baseline;gap:8px;width:100%}
+.navlist button:hover{background:var(--surface-2)}
+.navlist button[aria-current="true"]{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.navlist .num{font-family:var(--font-data);font-size:10.5px;color:var(--muted)}
+.navlist button[aria-current="true"] .num{color:var(--accent)}
+.navfoot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.6}
+.themebtn{margin-top:14px;background:none;border:1px solid var(--line-2);border-radius:var(--r);
+  padding:5px 10px;font-size:11.5px;color:var(--fg-2)}
+
+.content{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));
+  padding-block:24px 48px;min-width:0}
+.phead{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;
+  padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.phead h1{font-size:21px;letter-spacing:-.25px}
+.phead .sub{font-size:12.5px;color:var(--muted);margin-top:4px}
+.phead .asof{font-size:11.5px;color:var(--muted);text-align:right;font-family:var(--font-data)}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px;
+  background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:24px}
+.kpi{background:var(--surface);padding:12px 14px 13px;min-width:0}
+.kpi .t{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font-size:26px;font-weight:600;letter-spacing:-.6px;margin-top:5px;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .v em{font-style:normal;font-size:14px;font-weight:400;color:var(--muted)}
+.kpi .d{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+.kpi.w .v{color:var(--warn)}
+
+.grid{display:grid;gap:20px;margin-bottom:22px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:15px 16px 16px;min-width:0}
+.card h2{font-size:12.5px;letter-spacing:-.05px;margin-bottom:12px}
+.card h2 .q{font-weight:400;color:var(--muted)}
+.note{font-size:11px;color:var(--muted);line-height:1.55;margin-top:11px}
+
+.bars{display:flex;flex-direction:column;gap:7px}
+.brow{display:grid;grid-template-columns:minmax(72px,auto) minmax(0,1fr) auto;gap:10px;align-items:center}
+.brow .bl{font-size:11.5px;color:var(--fg-2);text-align:right;min-width:0}
+.btrack{height:11px;background:var(--surface-2);border-radius:1px;position:relative;min-width:0}
+.bfill{height:11px;border-radius:1px;background:var(--accent-2)}
+.bfill.w{background:var(--warn)}
+.bfill.n{background:var(--neutral-bar)}
+.bfill.o{background:var(--ok)}
+.bmark{position:absolute;top:-2px;width:2px;height:15px;background:var(--fg)}
+.bv{font-size:11.5px;font-family:var(--font-data);color:var(--fg);white-space:nowrap;font-variant-numeric:tabular-nums}
+.scale{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);
+  border-top:1px solid var(--line);padding-top:4px;margin-top:7px;font-family:var(--font-data)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:11px;color:var(--fg-2);margin-top:11px}
+.legend i{width:9px;height:9px;display:inline-block;margin-right:5px;border-radius:1px;vertical-align:baseline}
+
+.tw{overflow-x:auto;min-width:0}
+th{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:400;
+  text-align:right;padding:0 0 7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th.l{text-align:left;padding-left:0}
+th.s{cursor:pointer;user-select:none}
+th.s:hover{color:var(--fg)}
+th .ar{opacity:.45;font-size:9px}
+td{padding:7px 0 7px 10px;border-bottom:1px solid var(--line);text-align:right;
+  font-family:var(--font-data);font-size:11.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.l{text-align:left;padding-left:0;font-family:var(--font-ui);font-size:12.5px;white-space:normal}
+tbody tr:hover td{background:var(--surface-2)}
+.tot td{font-weight:500;border-bottom:0}
+
+.chip{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:9px;font-weight:500;white-space:nowrap}
+.c-ok{background:var(--ok-soft);color:var(--ok)}
+.c-w{background:var(--warn-soft);color:var(--warn)}
+.c-a{background:var(--accent-soft);color:var(--accent)}
+.c-n{background:var(--surface-2);color:var(--fg-2)}
+.mono{font-family:var(--font-data)}
+.strong{font-weight:500;color:var(--fg)}
+.wtx{color:var(--warn);font-weight:500}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px}
+.flab{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.fchip{background:var(--surface);border:1px solid var(--line-2);border-radius:13px;padding:5px 12px;
+  font-size:12px;color:var(--fg-2)}
+.fchip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.sel{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r);padding:5px 9px;
+  font-size:12px;color:var(--fg);font-family:inherit}
+
+.search{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:18px}
+.sfield{flex:1 1 280px;min-width:0}
+.sfield label{display:block;font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.sfield input{width:100%;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r);
+  padding:9px 11px;font:inherit;font-size:13.5px;color:var(--fg)}
+.sres{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:20px;
+  max-height:212px;overflow-y:auto}
+.sres button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;width:100%;background:none;border:0;
+  border-bottom:1px solid var(--line);padding:9px 13px;text-align:left;align-items:center}
+.sres button:last-child{border-bottom:0}
+.sres button:hover{background:var(--surface-2)}
+.sres button[aria-current="true"]{background:var(--accent-soft)}
+.sres .nm{font-size:13px;font-weight:500;display:block}
+.sres .mt{font-size:11px;color:var(--muted);margin-top:2px;display:block}
+.sres .rt{font-family:var(--font-data);font-size:11px;color:var(--muted);text-align:right}
+.sempty{padding:13px;font-size:12px;color:var(--muted)}
+
+.ident{display:flex;flex-wrap:wrap;gap:12px 34px;align-items:flex-end;padding-bottom:16px;
+  border-bottom:1px solid var(--line);margin-bottom:20px}
+.ident .nm{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.ident .mt{font-size:12px;color:var(--muted);margin-top:3px}
+.ident .f .t{font-size:9.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
+.ident .f .v{font-size:13.5px;margin-top:3px;font-family:var(--font-data)}
+
+.callout{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px 14px;border-radius:0 var(--r) var(--r) 0}
+.callout.a{border-left-color:var(--accent);background:var(--accent-soft)}
+.callout h3{font-size:11.5px;color:var(--warn);margin-bottom:6px}
+.callout.a h3{color:var(--accent)}
+.callout p{font-size:11.5px;color:var(--fg-2);line-height:1.6}
+.callout p+p{margin-top:8px}
+
+.hero{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));margin-bottom:22px}
+.mod{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 17px 17px;
+  text-align:left;display:flex;flex-direction:column;gap:11px}
+.mod:hover{border-color:var(--line-2)}
+.mod .mh{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.mod .mt{font-size:14px;font-weight:600}
+.mod .mn{font-family:var(--font-data);font-size:10.5px;color:var(--muted)}
+.mod .md{font-size:12px;color:var(--fg-2);line-height:1.55}
+.mod .mstat{display:flex;gap:18px;flex-wrap:wrap;padding-top:11px;border-top:1px solid var(--line)}
+.mod .mstat div{min-width:0}
+.mod .mstat .sv{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+.mod .mstat .sl{font-size:10.5px;color:var(--muted);margin-top:1px}
+.mod .go{font-size:11.5px;color:var(--accent);font-weight:500}
+
+svg{display:block;width:100%;height:auto;max-width:100%;overflow:visible}
+.ax{fill:var(--muted);font-size:9.5px;font-family:var(--font-data)}
+.axt{fill:var(--muted);font-size:10px}
+.gl{stroke:var(--line)}
+.ref{stroke:var(--line-2)}
+.ln-a{stroke:var(--accent-2);fill:none;stroke-width:2}
+.ln-w{stroke:var(--warn);fill:none;stroke-width:2}
+.ln-d{stroke:var(--neutral-bar);fill:none;stroke-width:1.5;stroke-dasharray:5 3}
+.dot-a{fill:var(--accent-2)}
+.dot-w{fill:var(--warn)}
+.band{fill:var(--accent-soft)}
+.lbl-w{fill:var(--warn);font-size:9.5px;font-family:var(--font-data)}
+.bar-a{fill:var(--accent-2)}
+.bar-w{fill:var(--warn)}
+
+.cols2{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.deff{font-size:11.5px;color:var(--fg-2);line-height:1.7}
+.deff b{color:var(--fg);font-weight:500}
+.deff div+div{margin-top:10px}
+.ul{list-style:none;padding:0;margin:0;font-size:11.5px;color:var(--fg-2);line-height:1.65}
+.ul li{padding-left:13px;position:relative}
+.ul li::before{content:"";position:absolute;left:0;top:8px;width:4px;height:4px;border-radius:50%;background:var(--line-2)}
+.ul li+li{margin-top:5px}
+
+.ent{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ent .eh{padding:9px 13px;font-size:12.5px;font-weight:600;color:var(--surface);background:var(--accent)}
+.ent ul{list-style:none;margin:0;padding:10px 13px 12px;font-family:var(--font-data);font-size:11px;line-height:1.85;color:var(--fg-2)}
+.ent li.pk{color:var(--fg);font-weight:500}
+.ent li.fk{color:var(--warn)}
+.ent .sep{margin-top:7px;padding-top:7px;border-top:1px dashed var(--line-2);font-size:9.5px;
+  letter-spacing:.6px;color:var(--muted);font-family:var(--font-ui)}
+
+.ficti{font-size:11px;color:var(--muted);background:var(--surface-2);border-radius:var(--r);
+  padding:8px 11px;margin-bottom:20px;line-height:1.5}
+
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .nav{border-right:0;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);
+    z-index:5;max-height:none;padding-block:14px 12px;padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .navlist{flex-direction:row;overflow-x:auto;margin-top:12px;gap:6px;padding-bottom:2px}
+  .navlist button{white-space:nowrap;width:auto;padding:6px 11px;border:1px solid var(--line)}
+  .navfoot,.themebtn{display:none}
+  .navinner{position:static}
+  .phead .asof{text-align:left}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="nav">
+   <div class="navinner">
+    <div class="brand">Control Interno<span>Isapre Banmédica</span></div>
+    <div class="navlist" id="navlist" role="tablist"></div>
+    <div class="navfoot">
+      Maqueta de trabajo con datos ficticios.<br>
+      Corte 31-10-2026.
+      <button class="themebtn" id="themebtn" type="button">Cambiar tema</button>
+    </div>
+   </div>
+  </aside>
+
+  <main class="content">
+    <section id="inicio"></section>
+    <section id="remediacion" hidden></section>
+    <section id="agentes" hidden></section>
+    <section id="licencias" hidden></section>
+    <section id="modelo" hidden></section>
+  </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------------------------------------------------------- utilidades */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);
+  t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function nf(n,d){d=d||0;return n.toLocaleString("es-CL",{minimumFractionDigits:d,maximumFractionDigits:d});}
+function pc(n,d){d=(d===undefined)?1:d;return nf(n,d)+"%";}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function el(html){var d=document.createElement("div");d.innerHTML=html;return d.firstElementChild;}
+
+function bars(rows,max,opt){
+  opt=opt||{};
+  var h='<div class="bars">';
+  rows.forEach(function(r){
+    var w=Math.max(0,Math.min(100,r.v/max*100));
+    var mk=(r.mark!==undefined)?'<div class="bmark" style="left:'+(r.mark/max*100)+'%"></div>':"";
+    h+='<div class="brow"><div class="bl">'+r.n+'</div><div class="btrack">'+
+       '<div class="bfill '+(r.c||"")+'" style="width:'+w+'%"></div>'+mk+'</div>'+
+       '<div class="bv">'+r.lab+'</div></div>';
+  });
+  h+='</div>';
+  if(opt.scale) h+='<div class="scale">'+opt.scale.map(function(s){return "<span>"+s+"</span>";}).join("")+'</div>';
+  if(opt.legend) h+='<div class="legend">'+opt.legend.map(function(l){
+      return '<span><i style="background:'+l[1]+'"></i>'+l[0]+'</span>';}).join("")+'</div>';
+  return h;
+}
+
+function stacked(rows,legend){
+  var h='<div class="bars">';
+  rows.forEach(function(r){
+    h+='<div class="brow"><div class="bl">'+r.n+'</div><div class="btrack" style="display:flex;overflow:hidden">';
+    r.parts.forEach(function(p){
+      h+='<div style="height:11px;width:'+p[0]+'%;background:'+p[1]+'"></div>';
+    });
+    h+='</div><div class="bv">'+r.lab+'</div></div>';
+  });
+  h+='</div>';
+  if(legend) h+='<div class="legend">'+legend.map(function(l){
+      return '<span><i style="background:'+l[1]+'"></i>'+l[0]+'</span>';}).join("")+'</div>';
+  return h;
+}
+
+/* ---------------------------------------------------------------- datos: planes */
+var GERENCIAS=["Operaciones","Personas","Salud","Convenios y Redes","TI","Finanzas","Estudios","Legal","Comercial"];
+var AREAS=["Gestión de Riesgos y Control Interno","Gestión Regulatoria y Fraude"];
+var CRITS=["Extremo","Alto","Moderado","Bajo"];
+
+var PLANES=(function(){
+  var r=rng(20261031),out=[],perfil={
+    "Operaciones":{n:18,v:.61},"Personas":{n:14,v:.50},"Salud":{n:9,v:.45},
+    "Convenios y Redes":{n:11,v:.27},"TI":{n:8,v:.37},"Finanzas":{n:7,v:.15},
+    "Estudios":{n:6,v:0},"Legal":{n:4,v:0},"Comercial":{n:3,v:0}};
+  var id=1;
+  GERENCIAS.forEach(function(g){
+    var p=perfil[g];
+    for(var i=0;i<p.n;i++){
+      var venc=(i/p.n)<p.v;
+      var area=r()<0.79?AREAS[0]:AREAS[1];
+      var crit=CRITS[venc?(r()<.42?(r()<.5?0:1):(r()<.7?2:3)):(r()<.2?1:(r()<.7?2:3))];
+      var estado,atraso=0;
+      if(venc){estado=r()<.52?"En curso":"No iniciado";atraso=Math.round(8+r()*170);}
+      else{var q=r();estado=q<.62?"Completado":(q<.86?"En curso":"No iniciado");}
+      var cod=(area===AREAS[0]?"GR-":"IA0"+(r()<.6?1:2)+"-R")+String(id).padStart(2,"0");
+      out.push({id:id++,cod:cod,area:area,ger:g,estado:estado,venc:venc,atraso:atraso,crit:crit,
+                dias:venc?0:Math.round(5+r()*95)});
+    }
+  });
+  return out;
+})();
+
+var HALLAZGOS_SIN_PLAN=16;
+
+/* ---------------------------------------------------------------- datos: agentes */
+var SUC=["Providencia","Las Condes","Santiago Centro","Viña del Mar","Concepción"];
+var AGENTES=(function(){
+  var base=[
+    {cod:"A-1047",nom:"Sebastián Benítez",suc:"Providencia",ing:"15-03-2021",ant:"5 años 8 meses",
+     cartera:412,ventas:87,prima:9840,desaf:14.2,temp:22.4,sini:[82.1,87.4,91.0,94.3],recl:7,
+     perm:[89.0,77.6,68.2,61.4],sup:"M. Urán",
+     mot:[["Cambio a otra isapre",24],["No pago de cotización",14],["Término contrato laboral",11],
+          ["Cambio a Fonasa",7],["Otros",3]],
+     rec:[["Información incompleta del plan",3,2],["Cobertura no informada en la venta",2,2],
+          ["Declaración de salud (DPS)",1,1],["Cobros y descuentos",1,0]],
+     pct:{ventas:88,desaf:81,temp:92,sini:94,recl:89},
+     ventasMes:[6,5,9,4,8,7,9,8,6,9,8,8],
+     flag:"Alto volumen de venta con siniestralidad y desafiliación temprana sobre el grupo. Es el perfil compatible con venta a personas con condiciones preexistentes no declaradas o con plan mal explicado en el punto de venta."}
+  ];
+  var nombres=["Carolina Rojas","Marcela Urán","Gabriel Soto","Paulina Herrera","Javier Salazar",
+    "Daniela Fuentes","Rodrigo Cáceres","Ignacia Moll","Felipe Araya","Valentina Pizarro","Cristóbal Lagos"];
+  var r=rng(7781);
+  nombres.forEach(function(n,i){
+    var ventas=Math.round(28+r()*58), desaf=6.5+r()*9, temp=8+r()*13, s0=72+r()*14;
+    var sini=[s0,s0+(r()-.4)*3,s0+(r()-.4)*5,s0+(r()-.35)*6].map(function(x){return Math.round(x*10)/10;});
+    var recl=Math.round(r()*5);
+    base.push({cod:"A-1"+String(102+i*7).padStart(3,"0"),nom:n,suc:SUC[i%SUC.length],
+      ing:String(2+Math.floor(r()*26)).padStart(2,"0")+"-0"+(1+Math.floor(r()*9))+"-20"+(16+Math.floor(r()*8)),
+      ant:(2+Math.floor(r()*8))+" años "+Math.floor(r()*11)+" meses",
+      cartera:Math.round(150+r()*330),ventas:ventas,prima:Math.round((3200+r()*7600)/10)*10,
+      desaf:Math.round(desaf*10)/10,temp:Math.round(temp*10)/10,sini:sini,recl:recl,
+      perm:[Math.round((91+r()*5)*10)/10,Math.round((82+r()*6)*10)/10,
+            Math.round((74+r()*7)*10)/10,Math.round((68+r()*8)*10)/10],
+      sup:["M. Urán","C. Rojas","J. Salazar"][i%3],
+      mot:[["Cambio a otra isapre",Math.round(5+r()*14)],["No pago de cotización",Math.round(2+r()*8)],
+           ["Término contrato laboral",Math.round(1+r()*7)],["Cambio a Fonasa",Math.round(r()*5)],
+           ["Otros",Math.round(r()*3)]],
+      rec:recl?[["Información incompleta del plan",Math.max(1,recl-1),Math.max(0,recl-2)],
+                ["Cobros y descuentos",1,0]]:[],
+      pct:{ventas:Math.round(20+r()*60),desaf:Math.round(15+r()*55),temp:Math.round(12+r()*58),
+           sini:Math.round(15+r()*60),recl:Math.round(10+r()*60)},
+      ventasMes:Array.from({length:12},function(){return Math.round(1+r()*7);}),
+      flag:null});
+  });
+  return base;
+})();
+var PROM={desaf:11.8,temp:15.1,sini:[80.4,81.0,81.9,81.6],perm:[93.5,84.9,78.1,73.0],recl:2,ventas:61};
+
+/* ---------------------------------------------------------------- datos: emisores */
+var PERFILES=["Mixto / general","Musculoesquelético","Respiratorio e infeccioso","Salud mental",
+              "Digestivo","Gineco-obstétrico"];
+var PERF_MIX=[["Mixto / general",0.34,0.004],["Musculoesquelético",0.22,0.017],
+  ["Respiratorio e infeccioso",0.19,0.005],["Salud mental",0.13,0.036],
+  ["Digestivo",0.07,0.004],["Gineco-obstétrico",0.05,0.006]];
+var EMISORES=(function(){
+  var r=rng(4412),out=[],i=0;
+  PERF_MIX.forEach(function(pm){
+    var n=Math.round(2847*pm[1]);
+    for(var j=0;j<n;j++){
+      var marcado=r()<pm[2];
+      var pac=marcado?Math.round(58+Math.pow(r(),1.35)*250)
+        :(r()<0.9?Math.round(2+(-Math.log(1-r()))*7):Math.round(38+Math.pow(r(),1.5)*270));
+      var esp=Math.round(pac*(8.4+r()*3.3));
+      var lift=marcado?(1.42+r()*0.72):Math.exp((r()+r()+r()-1.5)*0.165);
+      var obs=Math.round(esp*lift);
+      var des=Math.round((Math.log(obs/Math.max(esp,1))/0.135)*10)/10;
+      out.push({cod:"M-"+String(1000+(i++)*3).padStart(4,"0"),perf:pm[0],pac:pac,
+        lic:Math.max(1,Math.round(pac*(0.62+r()*0.55))),esp:esp,obs:obs,des:des,
+        rech:Math.round((marcado?(21+r()*23):(7+r()*19))*10)/10,marcado:marcado});
+    }
+  });
+  return out.sort(function(a,b){return b.des-a.des;});
+})();
+var ALERTAS=EMISORES.filter(function(e){return e.des>3 && e.lic>=40;});
+var MUESTRA=(function(){
+  var r=rng(991),sin=EMISORES.filter(function(e){return !(e.des>3&&e.lic>=40);});
+  var grandes=sin.slice().sort(function(a,b){return b.esp-a.esp;}).slice(0,170);
+  var marca={};grandes.forEach(function(e){marca[e.cod]=1;});
+  var resto=sin.filter(function(e){return !marca[e.cod];});
+  for(var i=resto.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var tm=resto[i];resto[i]=resto[j];resto[j]=tm;}
+  return grandes.concat(resto.slice(0,170));
+})();
+
+/* ---------------------------------------------------------------- SVG */
+function svgLine(cfg){
+  var W=cfg.w||400,H=cfg.h||150,ML=38,MR=10,MT=10,MB=24;
+  var lo=cfg.lo,hi=cfg.hi,n=cfg.series[0].d.length;
+  function X(i){return ML+i*(W-ML-MR)/(n-1);}
+  function Y(v){return H-MB-(v-lo)/(hi-lo)*(H-MB-MT);}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(cfg.alt||"")+'">';
+  (cfg.ticks||[]).forEach(function(t){
+    s+='<line class="'+(t===cfg.refline?"ref":"gl")+'" x1="'+ML+'" y1="'+Y(t)+'" x2="'+(W-MR)+'" y2="'+Y(t)+'"/>';
+    s+='<text class="ax" x="'+(ML-6)+'" y="'+(Y(t)+3)+'" text-anchor="end">'+(cfg.fmt?cfg.fmt(t):t)+'</text>';
+  });
+  cfg.series.forEach(function(se){
+    s+='<polyline class="'+se.cls+'" points="'+se.d.map(function(v,i){return X(i)+","+Y(v);}).join(" ")+'"/>';
+    if(se.dots) se.d.forEach(function(v,i){
+      s+='<circle class="'+(se.cls==="ln-w"?"dot-w":"dot-a")+'" cx="'+X(i)+'" cy="'+Y(v)+'" r="3"/>';
+    });
+  });
+  cfg.labels.forEach(function(l,i){
+    s+='<text class="ax" x="'+X(i)+'" y="'+(H-7)+'" text-anchor="'+
+       (i===0?"start":(i===n-1?"end":"middle"))+'">'+l+'</text>';
+  });
+  return s+'</svg>';
+}
+
+function svgCols(cfg){
+  var W=cfg.w||400,H=cfg.h||150,ML=30,MR=8,MT=12,MB=24;
+  var max=cfg.max,n=cfg.d.length,bw=(W-ML-MR)/n;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(cfg.alt||"")+'">';
+  (cfg.ticks||[]).forEach(function(t){
+    var y=H-MB-t/max*(H-MB-MT);
+    s+='<line class="gl" x1="'+ML+'" y1="'+y+'" x2="'+(W-MR)+'" y2="'+y+'"/>';
+    s+='<text class="ax" x="'+(ML-6)+'" y="'+(y+3)+'" text-anchor="end">'+t+'</text>';
+  });
+  if(cfg.meta!==undefined){
+    var ym=H-MB-cfg.meta/max*(H-MB-MT);
+    s+='<line class="ln-w" style="stroke-dasharray:4 3;stroke-width:1" x1="'+ML+'" y1="'+ym+'" x2="'+(W-MR)+'" y2="'+ym+'"/>';
+    s+='<text class="lbl-w" x="'+(W-MR)+'" y="'+(ym-4)+'" text-anchor="end">meta '+cfg.meta+'</text>';
+  }
+  cfg.d.forEach(function(v,i){
+    var h=v/max*(H-MB-MT);
+    s+='<rect class="bar-a" x="'+(ML+i*bw+2)+'" y="'+(H-MB-h)+'" width="'+(bw-4)+'" height="'+h+'" rx="1"/>';
+    s+='<text class="ax" x="'+(ML+i*bw+bw/2)+'" y="'+(H-7)+'" text-anchor="middle">'+cfg.labels[i]+'</text>';
+  });
+  return s+'</svg>';
+}
+
+function svgScatter(){
+  var W=560,H=360,ML=56,MR=16,MT=16,MB=40,MAX=5400;
+  function X(v){return ML+v/MAX*(W-ML-MR);}
+  function Y(v){return H-MB-v/MAX*(H-MB-MT);}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Días observados contra días esperados por emisor">';
+  s+='<polygon class="band" points="'+X(0)+','+Y(0)+' '+X(MAX/1.25)+','+Y(MAX)+' '+
+     X(MAX)+','+Y(MAX)+' '+X(MAX)+','+Y(MAX*0.75)+' '+X(0)+','+Y(0)+'"/>';
+  [0,1800,3600,5400].forEach(function(t){
+    s+='<line class="gl" x1="'+ML+'" y1="'+Y(t)+'" x2="'+(W-MR)+'" y2="'+Y(t)+'"/>';
+    s+='<line class="gl" x1="'+X(t)+'" y1="'+MT+'" x2="'+X(t)+'" y2="'+(H-MB)+'"/>';
+    s+='<text class="ax" x="'+(ML-6)+'" y="'+(Y(t)+3)+'" text-anchor="end">'+nf(t)+'</text>';
+    s+='<text class="ax" x="'+X(t)+'" y="'+(H-MB+14)+'" text-anchor="middle">'+nf(t)+'</text>';
+  });
+  s+='<line class="ref" style="stroke-width:1.4" x1="'+X(0)+'" y1="'+Y(0)+'" x2="'+X(MAX)+'" y2="'+Y(MAX)+'"/>';
+  MUESTRA.forEach(function(e){
+    if(e.obs>MAX||e.esp>MAX) return;
+    s+='<circle class="dot-a" fill-opacity="0.45" cx="'+X(e.esp)+'" cy="'+Y(e.obs)+'" r="2.6"><title>'+
+       esc(e.cod+" · "+e.perf+" · desvío "+nf(e.des,1))+'</title></circle>';
+  });
+  var puestas=[];
+  ALERTAS.forEach(function(e){
+    if(e.obs>MAX||e.esp>MAX) return;
+    var cx=X(e.esp),cy=Y(e.obs);
+    s+='<circle class="dot-w" cx="'+cx+'" cy="'+cy+'" r="4.5"><title>'+
+       esc(e.cod+" · "+e.perf+" · desvío "+nf(e.des,1))+'</title></circle>';
+    if(puestas.length>=5||cx>W-120) return;
+    var choca=puestas.some(function(p){return Math.abs(p[0]-cx)<86&&Math.abs(p[1]-cy)<24;});
+    if(choca) return;
+    puestas.push([cx,cy]);
+    s+='<text class="lbl-w" x="'+(cx+8)+'" y="'+(cy+3)+'">'+e.cod+'</text>';
+  });
+  s+='<text class="axt" x="'+((ML+W-MR)/2)+'" y="'+(H-4)+'" text-anchor="middle">Días esperados por el modelo</text>';
+  s+='<text class="axt" transform="rotate(-90 13 '+((MT+H-MB)/2)+')" x="13" y="'+((MT+H-MB)/2)+
+     '" text-anchor="middle">Días observados</text>';
+  return s+'</svg>';
+}
+
+/* ---------------------------------------------------------------- vista: inicio */
+function vInicio(){
+  var venc=PLANES.filter(function(p){return p.venc;}).length;
+  var abiertos=PLANES.filter(function(p){return p.estado!=="Completado";}).length;
+  var mods=[
+    {id:"remediacion",n:"01",t:"Planes de remediación",
+     d:"Compromisos de ambas áreas sobre un mismo ciclo de vida: controles evaluados como inefectivos y recomendaciones de informes de auditoría interna.",
+     s:[[nf(PLANES.length),"planes"],[nf(venc),"vencidos"],[nf(HALLAZGOS_SIN_PLAN),"sin plan"]]},
+    {id:"agentes",n:"02",t:"Agentes de ventas",
+     d:"Ficha por agente con antigüedad, venta anual, permanencia de la cartera, siniestralidad por semestre y reclamos, siempre contra el promedio de su sucursal.",
+     s:[[nf(AGENTES.length),"agentes"],[pc(14.2),"desafiliación"],["7","reclamos"]]},
+    {id:"licencias",n:"03",t:"Emisores de licencias",
+     d:"Modelo de regresión que estima los días de reposo esperados por emisor y marca a quienes se desvían de lo que explica su práctica.",
+     s:[[nf(EMISORES.length),"emisores"],[nf(ALERTAS.length),"sobre el umbral"],[pc(18.7),"rechazo"]]}
+  ];
+  return '<div class="phead"><div><h1>Portal de Control Interno</h1>'+
+    '<div class="sub">Gestión de Riesgos y Control Interno · Gestión Regulatoria y Fraude</div></div>'+
+    '<div class="asof">Corte 31-10-2026<br>Actualizado 10:15</div></div>'+
+    '<div class="ficti">Maqueta de trabajo. Todas las cifras, nombres y códigos son ficticios y sirven para '+
+    'evaluar la estructura de los paneles, no para sacar conclusiones.</div>'+
+    '<div class="hero">'+mods.map(function(m){
+      return '<button class="mod" type="button" data-go="'+m.id+'">'+
+        '<div class="mh"><span class="mt">'+m.t+'</span><span class="mn">'+m.n+'</span></div>'+
+        '<div class="md">'+m.d+'</div>'+
+        '<div class="mstat">'+m.s.map(function(x){
+          return '<div><div class="sv">'+x[0]+'</div><div class="sl">'+x[1]+'</div></div>';}).join("")+'</div>'+
+        '<div class="go">Abrir módulo →</div></button>';
+    }).join("")+'</div>'+
+    '<div class="grid g2">'+
+      '<div class="card"><h2>Qué resuelve este portal</h2>'+
+      '<div class="deff">'+
+      '<div><b>Una sola llave entre áreas.</b> Procesos identifica por número de control (GR-CAP-02) y '+
+      'Regulatoria por informe más recomendación (IA01-R01). El modelo las deja convivir sin chocar.</div>'+
+      '<div><b>Un solo criterio de cumplimiento.</b> Se mide contra la fecha de compromiso original y no '+
+      'contra la fecha ya prorrogada, que es lo que hacía la planilla.</div>'+
+      '<div><b>Cierre verificado.</b> El estado lo declara la gerencia; la certificación la otorga el área '+
+      'de control. Son dos campos distintos y el portal muestra la brecha.</div>'+
+      '</div></div>'+
+      '<div class="card"><h2>Cruce entre módulos</h2>'+
+      '<div class="callout a"><h3>Triángulo agente · afiliado · emisor</h3>'+
+      '<p>Un agente con siniestralidad y desafiliación temprana sobre su grupo puede estar vendiendo a '+
+      'personas con preexistencias no declaradas. Si además las licencias de su cartera en los primeros '+
+      'doce meses se concentran en pocos emisores, los tres módulos describen el mismo caso.</p>'+
+      '<p>Es el cruce que conecta el caso DPS con el detector de emisores.</p></div></div>'+
+    '</div>';
+}
+
+/* ---------------------------------------------------------------- vista: remediación */
+var fArea="todas", fGer="todas";
+function vRemediacion(){
+  return '<div class="phead"><div><h1>Planes de remediación</h1>'+
+    '<div class="sub">Consolidado de Gestión de Riesgos y Control Interno y Gestión Regulatoria y Fraude</div></div>'+
+    '<div class="asof">Corte 31-10-2026</div></div>'+
+    '<div class="filters" id="remfilters"></div><div id="remcontent"></div>';
+}
+function remFiltros(){
+  var h='<span class="flab">Área de origen</span>';
+  ["todas",AREAS[0],AREAS[1]].forEach(function(a){
+    h+='<button class="fchip" type="button" data-area="'+esc(a)+'" aria-pressed="'+(fArea===a)+'">'+
+       (a==="todas"?"Ambas":esc(a.replace("Gestión de ","").replace("Gestión ","")))+'</button>';
+  });
+  h+='<span class="flab" style="margin-left:10px">Gerencia</span><select class="sel" id="fger">';
+  h+='<option value="todas">Todas</option>';
+  GERENCIAS.forEach(function(g){h+='<option value="'+esc(g)+'"'+(fGer===g?" selected":"")+'>'+esc(g)+'</option>';});
+  return h+'</select>';
+}
+function remDatos(){
+  return PLANES.filter(function(p){
+    return (fArea==="todas"||p.area===fArea)&&(fGer==="todas"||p.ger===fGer);});
+}
+function remContenido(){
+  var d=remDatos(),tot=d.length;
+  var compl=d.filter(function(p){return p.estado==="Completado";}).length;
+  var venc=d.filter(function(p){return p.venc;}).length;
+  var abiertos=tot-compl;
+  var encursoPlazo=d.filter(function(p){return !p.venc&&p.estado==="En curso";}).length;
+  var noiniPlazo=d.filter(function(p){return !p.venc&&p.estado==="No iniciado";}).length;
+  var critVenc=d.filter(function(p){return p.venc&&(p.crit==="Extremo"||p.crit==="Alto");}).length;
+  var sinPlan=(fArea==="todas"&&fGer==="todas")?HALLAZGOS_SIN_PLAN:
+    Math.max(0,Math.round(HALLAZGOS_SIN_PLAN*tot/PLANES.length));
+
+  var k='<div class="kpis">'+
+    kpi("Total de planes",nf(tot),"en el filtro vigente")+
+    kpi("Abiertos",nf(abiertos),"no completados ni anulados")+
+    kpi("Vencidos",nf(venc),nf(critVenc)+" de criticidad extrema o alta",true)+
+    kpi("Cumplimiento en plazo",pc(31.7)+' <em>/ '+pc(48.8)+'</em>',"compromiso original / prorrogado")+
+    kpi("Hallazgos sin plan",nf(sinPlan),"sin compromiso formulado",true)+'</div>';
+
+  var estadoRows=[
+    {n:"Completado",v:compl,c:"o",lab:nf(compl)},
+    {n:"En curso, en plazo",v:encursoPlazo,c:"",lab:nf(encursoPlazo)},
+    {n:"No iniciado, en plazo",v:noiniPlazo,c:"n",lab:nf(noiniPlazo)},
+    {n:"Vencido",v:venc,c:"w",lab:nf(venc)}];
+  var maxE=Math.max.apply(null,estadoRows.map(function(r){return r.v;}))||1;
+
+  var porGer=GERENCIAS.map(function(g){
+    var dd=d.filter(function(p){return p.ger===g;});
+    if(!dd.length) return null;
+    var v=dd.filter(function(p){return p.venc;}).length;
+    return {g:g,n:dd.length,ab:dd.filter(function(p){return p.estado!=="Completado";}).length,
+            v:v,pct:Math.round(v/dd.length*100)};
+  }).filter(Boolean).sort(function(a,b){return b.pct-a.pct;});
+
+  var tabla='<div class="tw"><table><thead><tr><th class="l">Gerencia</th><th>Planes</th>'+
+    '<th>Abiertos</th><th>Vencidos</th><th>% vencido</th></tr></thead><tbody>'+
+    porGer.map(function(r){
+      return '<tr><td class="l">'+esc(r.g)+'</td><td>'+r.n+'</td><td>'+r.ab+'</td><td>'+r.v+'</td>'+
+        '<td class="'+(r.pct>=45?"wtx":"")+'">'+pc(r.pct,0)+'</td></tr>';}).join("")+
+    '</tbody></table></div>';
+
+  var prox=[{n:"Vencidos",v:venc,c:"w",lab:nf(venc)},
+    {n:"Vencen en 30 días",v:Math.round(tot*.09),c:"",lab:nf(Math.round(tot*.09))},
+    {n:"Vencen en 31-60 días",v:Math.round(tot*.06),c:"n",lab:nf(Math.round(tot*.06))},
+    {n:"Vencen en 61-90 días",v:Math.round(tot*.075),c:"n",lab:nf(Math.round(tot*.075))}];
+  var maxP=Math.max.apply(null,prox.map(function(r){return r.v;}))||1;
+
+  var crit=CRITS.map(function(c){
+    var v=d.filter(function(p){return p.venc&&p.crit===c;}).length;
+    return {n:c,v:v,c:(c==="Extremo"||c==="Alto")?"w":"n",lab:nf(v)};});
+  var maxC=Math.max.apply(null,crit.map(function(r){return r.v;}))||1;
+
+  return k+
+    '<div class="grid g2">'+
+      '<div class="card"><h2>Estado de los planes <span class="q">· suman el total</span></h2>'+
+        bars(estadoRows,maxE,{scale:["0",nf(Math.round(maxE/2)),nf(maxE)]})+
+        '<div class="note">Vencido agrupa planes en curso y no iniciados cuya fecha de término ya pasó.</div></div>'+
+      '<div class="card"><h2>Evolución mensual</h2>'+
+        svgLine({w:400,h:158,lo:0,hi:Math.max(45,compl+6,venc+6),
+          ticks:[0,15,30,45].filter(function(x){return x<=Math.max(45,compl+6,venc+6);}),
+          labels:["Jun","Jul","Ago","Sep","Oct"],
+          alt:"Planes cerrados acumulados y vencidos abiertos entre junio y octubre",
+          series:[{d:[8,15,23,31,39].map(function(v){return Math.round(v*compl/39);}),cls:"ln-a",dots:true},
+                  {d:[9,14,18,21,23].map(function(v){return Math.round(v*venc/23);}),cls:"ln-w",dots:true}]})+
+        '<div class="legend"><span><i style="background:var(--accent-2)"></i>Cerrados, acumulado</span>'+
+        '<span><i style="background:var(--warn)"></i>Vencidos abiertos</span></div></div>'+
+    '</div>'+
+    '<div class="grid g2">'+
+      '<div class="card"><h2>Resumen por gerencia <span class="q">· orden por % vencido</span></h2>'+tabla+
+        '<div class="note">Se destaca sobre 45%.</div></div>'+
+      '<div class="card"><h2>Próximos vencimientos</h2>'+bars(prox,maxP,{scale:["0",nf(maxP)]})+
+        '<div style="height:18px"></div><h2>Criticidad de los planes vencidos</h2>'+
+        bars(crit,maxC,{scale:["0",nf(maxC)]})+
+        '<div class="note">Los vencidos no son equivalentes entre sí: los extremos y altos encabezan la revisión.</div></div>'+
+    '</div>';
+}
+function kpi(t,v,d,warn){
+  return '<div class="kpi'+(warn?" w":"")+'"><div class="t">'+t+'</div><div class="v">'+v+
+    '</div><div class="d">'+d+'</div></div>';
+}
+
+/* ---------------------------------------------------------------- vista: agentes */
+var agSel=AGENTES[0].cod, agQuery="";
+function vAgentes(){
+  return '<div class="phead"><div><h1>Agentes de ventas</h1>'+
+    '<div class="sub">Comportamiento de la cartera vendida y reclamos asociados</div></div>'+
+    '<div class="asof">Corte 31-10-2026</div></div>'+
+    '<div class="search"><div class="sfield"><label for="agq">Buscar agente por nombre, código o sucursal</label>'+
+    '<input id="agq" type="search" autocomplete="off" placeholder="Sebastián Benítez" value="'+esc(agQuery)+'"></div></div>'+
+    '<div class="sres" id="agres"></div><div id="agficha"></div>';
+}
+function agLista(){
+  var q=agQuery.trim().toLowerCase();
+  var r=AGENTES.filter(function(a){
+    return !q||a.nom.toLowerCase().indexOf(q)>=0||a.cod.toLowerCase().indexOf(q)>=0||
+           a.suc.toLowerCase().indexOf(q)>=0;});
+  if(!r.length) return '<div class="sempty">Sin resultados para «'+esc(agQuery)+'».</div>';
+  return r.slice(0,8).map(function(a){
+    return '<button type="button" data-ag="'+a.cod+'" aria-current="'+(a.cod===agSel)+'">'+
+      '<span><span class="nm">'+esc(a.nom)+'</span>'+
+      '<span class="mt">'+a.cod+' · '+esc(a.suc)+' · '+a.cartera+' titulares</span></span>'+
+      '<span class="rt">'+pc(a.desaf)+'<br>desafiliación</span></button>';}).join("");
+}
+function agFicha(){
+  var a=AGENTES.filter(function(x){return x.cod===agSel;})[0];
+  if(!a) return "";
+  var sobre=function(v,p){return v>p;};
+  var id='<div class="ident"><div><div class="nm">'+esc(a.nom)+'</div>'+
+    '<div class="mt">'+a.cod+' · Sucursal '+esc(a.suc)+' · Canal fuerza propia</div></div>'+
+    [["Fecha de ingreso",a.ing],["Antigüedad",a.ant],["Cartera vigente",a.cartera+" titulares"],
+     ["Supervisor",a.sup],["Estado","Activo"]].map(function(f){
+      return '<div class="f"><div class="t">'+f[0]+'</div><div class="v">'+esc(f[1])+'</div></div>';}).join("")+
+    '</div>';
+
+  var k='<div class="kpis">'+
+    kpi("Ventas 12 meses",nf(a.ventas),"mediana sucursal "+PROM.ventas)+
+    kpi("Prima anual cartera","UF "+nf(a.prima),"UF "+nf(a.prima/a.cartera,1)+" por contrato")+
+    kpi("Desafiliación 12 meses",pc(a.desaf),"sucursal "+pc(PROM.desaf),sobre(a.desaf,PROM.desaf))+
+    kpi("Desafiliación temprana",pc(a.temp),"antes de 12 meses · sucursal "+pc(PROM.temp),sobre(a.temp,PROM.temp))+
+    kpi("Siniestralidad cartera",pc(a.sini[3]),"sucursal "+pc(PROM.sini[3]),sobre(a.sini[3],PROM.sini[3]))+
+    kpi("Reclamos en su contra",nf(a.recl),"mediana agente "+PROM.recl,a.recl>PROM.recl)+'</div>';
+
+  var maxM=Math.max.apply(null,a.mot.map(function(m){return m[1];}))||1;
+  var motRows=a.mot.map(function(m,i){
+    return {n:esc(m[0]),v:m[1],c:(i===1?"w":(i>2?"n":"")),lab:nf(m[1])};});
+  var totBajas=a.mot.reduce(function(s,m){return s+m[1];},0);
+
+  var permRows=a.perm.map(function(v,i){
+    return {n:[6,12,18,24][i]+" meses",v:v,c:"",lab:pc(v),mark:PROM.perm[i]};});
+
+  var pctRows=[["Ventas",a.pct.ventas],["Desafiliación",a.pct.desaf],["Desaf. temprana",a.pct.temp],
+    ["Siniestralidad",a.pct.sini],["Reclamos",a.pct.recl]].map(function(p){
+    return {n:p[0],v:p[1],c:p[1]>=70?"w":"",lab:"p"+p[1]};});
+
+  var rec=a.rec.length?('<div class="tw"><table><thead><tr><th class="l">Materia del reclamo</th>'+
+    '<th>N°</th><th>Acogidos</th></tr></thead><tbody>'+
+    a.rec.map(function(r){return '<tr><td class="l">'+esc(r[0])+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>';}).join("")+
+    '<tr class="tot"><td class="l">Total</td><td>'+a.rec.reduce(function(s,r){return s+r[1];},0)+
+    '</td><td>'+a.rec.reduce(function(s,r){return s+r[2];},0)+'</td></tr>'+
+    '</tbody></table></div>'):'<div class="note">Sin reclamos registrados en el período.</div>';
+
+  var flag=a.flag?('<div class="callout"><h3>Patrón a revisar</h3><p>'+esc(a.flag)+'</p>'+
+    '<p>Cruce sugerido: licencias médicas de su cartera en los primeros doce meses contra el módulo '+
+    'de emisores.</p></div>'):
+    ('<div class="callout a"><h3>Sin patrón destacado</h3><p>Los indicadores de este agente se mantienen '+
+    'dentro del rango de su sucursal en el período evaluado.</p></div>');
+
+  return id+k+
+    '<div class="grid g2">'+
+      '<div class="card"><h2>Ventas mensuales <span class="q">· últimos 12 meses</span></h2>'+
+      svgCols({w:400,h:150,d:a.ventasMes,max:10,ticks:[0,5,10],meta:6,
+        labels:["Nov","Dic","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct"],
+        alt:"Contratos nuevos por mes"})+
+      '<div class="note">El volumen por sí solo no califica la calidad de la venta.</div></div>'+
+      '<div class="card"><h2>Siniestralidad de la cartera <span class="q">· últimos 4 semestres</span></h2>'+
+      svgLine({w:400,h:158,lo:70,hi:102,ticks:[75,85,95,100],refline:100,fmt:function(t){return t+"%";},
+        labels:["2025-I","2025-II","2026-I","2026-II"],
+        alt:"Siniestralidad de la cartera del agente contra el promedio de la sucursal",
+        series:[{d:a.sini,cls:"ln-w",dots:true},{d:PROM.sini,cls:"ln-d"}]})+
+      '<div class="legend"><span><i style="background:var(--warn)"></i>Cartera del agente</span>'+
+      '<span><i style="background:var(--neutral-bar)"></i>Promedio sucursal</span></div>'+
+      '<div class="note">Costo en prestaciones y licencias sobre prima cotizada. Sobre 100% la cartera deja '+
+      'de ser rentable.</div></div>'+
+    '</div>'+
+    '<div class="grid g3">'+
+      '<div class="card"><h2>Permanencia por cohorte</h2>'+
+      bars(permRows,100,{scale:["0%","50%","100%"]})+
+      '<div class="legend"><span><i style="background:var(--accent-2)"></i>Cartera del agente</span>'+
+      '<span><i style="background:var(--fg);width:2px;height:11px"></i>Promedio sucursal</span></div></div>'+
+      '<div class="card"><h2>Motivo de desafiliación</h2>'+bars(motRows,maxM,{scale:["0",nf(maxM)]})+
+      '<div class="note">'+nf(totBajas)+' bajas en el período.</div></div>'+
+      '<div class="card"><h2>Posición frente a sus pares</h2>'+
+      bars(pctRows,100,{scale:["0","50","100"]})+
+      '<div class="note">Percentil dentro de los 38 agentes de la sucursal. 100 es el peor del grupo.</div></div>'+
+    '</div>'+
+    '<div class="grid g2">'+
+      '<div class="card"><h2>Reclamos en su contra</h2>'+rec+'</div>'+
+      '<div class="card"><h2>Lectura del caso</h2>'+flag+'</div>'+
+    '</div>';
+}
+
+/* ---------------------------------------------------------------- vista: licencias */
+var emSort="des", emDir=-1;
+function vLicencias(){
+  var dias=EMISORES.reduce(function(s,e){return s+e.obs;},0);
+  var lic=EMISORES.reduce(function(s,e){return s+e.lic;},0);
+  var exceso=ALERTAS.reduce(function(s,e){return s+(e.obs-e.esp);},0);
+  var k='<div class="kpis">'+
+    kpi("Emisores en el período",nf(EMISORES.length),"con al menos una licencia")+
+    kpi("Licencias recibidas",nf(lic),"en el período evaluado")+
+    kpi("Días de reposo",nf(dias),nf(dias/lic,1)+" días por licencia")+
+    kpi("Rechazo global",pc(18.7),"licencias rechazadas o reducidas")+
+    kpi("Sobre el umbral",nf(ALERTAS.length),"desvío mayor a 3 sigmas",true)+
+    kpi("Días en exceso",nf(exceso),"sobre lo que explica el modelo",true)+'</div>';
+
+  var perfRows=PERFILES.map(function(p){
+    var n=EMISORES.filter(function(e){return e.perf===p;}).length;
+    var al=ALERTAS.filter(function(e){return e.perf===p;}).length;
+    return {n:esc(p),v:n,c:(al/Math.max(n,1))>=0.02?"w":"",
+            lab:nf(n)+(al?"  ·  "+al+" alerta"+(al>1?"s":""):"")};
+  }).sort(function(a,b){return b.v-a.v;});
+  var maxPf=Math.max.apply(null,perfRows.map(function(r){return r.v;}));
+
+  return '<div class="phead"><div><h1>Emisores de licencias médicas</h1>'+
+    '<div class="sub">Priorización de casos para revisión · Gestión Regulatoria y Fraude</div></div>'+
+    '<div class="asof">Período 2026-I y 2026-II</div></div>'+k+
+    '<div class="grid g2">'+
+      '<div class="card"><h2>Días observados contra días esperados por el modelo</h2>'+svgScatter()+
+      '<div class="legend"><span><i style="background:var(--accent-2)"></i>Dentro de lo esperado</span>'+
+      '<span><i style="background:var(--warn)"></i>Sobre el umbral</span>'+
+      '<span><i style="background:var(--accent-soft)"></i>Banda de tolerancia ±25%</span></div>'+
+      '<div class="note">La diagonal es la predicción del modelo: por encima de ella, el emisor otorga más '+
+      'días de los que explican su volumen de pacientes y su mezcla de diagnósticos. Se dibujan todos los '+
+      'emisores marcados, los de mayor volumen y una muestra del resto, para que siga siendo legible.</div></div>'+
+      '<div class="card"><h2>Perfiles de prescripción</h2>'+bars(perfRows,maxPf,{scale:["0",nf(maxPf)]})+
+      '<div class="note">Agrupación por mezcla de diagnósticos. Sustituye a la especialidad, que no viene '+
+      'en la licencia.</div>'+
+      '<div style="height:18px"></div>'+
+      '<div class="callout"><h3>Alcance del modelo</h3>'+
+      '<p>El modelo prioriza emisores para revisión humana. Un desvío alto indica que el volumen no se '+
+      'explica por el tamaño ni por la mezcla de diagnósticos de su práctica, no que exista fraude.</p>'+
+      '<p>El perfil de prescripción es una agrupación estadística, no la especialidad registrada del '+
+      'profesional.</p></div></div>'+
+    '</div>'+
+    '<div class="card" style="margin-bottom:22px"><h2>Emisores priorizados</h2>'+
+    '<div id="emtabla"></div>'+
+    '<div class="note">Desvío en residuos estudentizados. El código enmascara al profesional hasta que el '+
+    'caso se abre formalmente. Haga clic en una columna para reordenar.</div></div>'+
+    '<div class="grid g2">'+
+      '<div class="card"><h2>Especificación del modelo</h2><div class="deff">'+
+      '<div><b>Variable dependiente</b><br>log(días de reposo otorgados por emisor y semestre)</div>'+
+      '<div><b>Predictores</b><br>log(pacientes distintos) · mix de diagnósticos por capítulo CIE-10 · '+
+      'edad promedio del paciente · porcentaje de mujeres · región · tipo de prestador · semestre</div>'+
+      '<div><b>Observaciones</b><br>'+nf(EMISORES.length*2)+' (emisores × 2 semestres)</div>'+
+      '<div><b>R² ajustado</b><br>0,74</div>'+
+      '<div><b>Criterio de alerta</b><br>residuo estudentizado mayor a 3,0 y al menos 40 licencias</div>'+
+      '</div></div>'+
+      '<div class="card"><h2>Señales que no entran al modelo</h2>'+
+      '<p class="note" style="margin-top:0;margin-bottom:10px">Se revisan sobre los emisores ya marcados y '+
+      'se adjuntan al expediente.</p>'+
+      '<ul class="ul">'+
+      ['Tasa de rechazo sobre el percentil 90 de su perfil',
+       'Duración media sobre la mediana del perfil para el mismo diagnóstico',
+       'Pacientes que repiten con el mismo emisor',
+       'Concentración en un mismo empleador o en la cartera de un mismo agente',
+       'Distancia entre la comuna del prestador y el domicilio del paciente',
+       'Emisión en días inhábiles'].map(function(x){return "<li>"+x+"</li>";}).join("")+
+      '</ul></div>'+
+    '</div>';
+}
+function emTabla(){
+  var d=ALERTAS.slice().sort(function(a,b){
+    var x=a[emSort],y=b[emSort];
+    if(typeof x==="string") return emDir*x.localeCompare(y,"es");
+    return emDir*(x-y);});
+  var cols=[["cod","Código","l"],["perf","Perfil de prescripción","l"],["lic","Licencias",""],
+    ["pac","Pacientes",""],["obs","Días obs.",""],["esp","Días esp.",""],["des","Desvío",""],
+    ["rech","% rechazo",""]];
+  return '<div class="tw"><table><thead><tr>'+cols.map(function(c){
+      return '<th class="'+(c[2]?c[2]+" ":"")+'s" data-sort="'+c[0]+'">'+c[1]+
+        (emSort===c[0]?' <span class="ar">'+(emDir<0?"▼":"▲")+'</span>':'')+'</th>';}).join("")+
+    '</tr></thead><tbody>'+d.slice(0,12).map(function(e){
+      return '<tr><td class="l mono strong">'+e.cod+'</td><td class="l">'+esc(e.perf)+'</td>'+
+        '<td>'+nf(e.lic)+'</td><td>'+nf(e.pac)+'</td><td>'+nf(e.obs)+'</td><td>'+nf(e.esp)+'</td>'+
+        '<td class="wtx">'+nf(e.des,1)+'</td><td>'+pc(e.rech)+'</td></tr>';}).join("")+
+    '</tbody></table></div>';
+}
+
+/* ---------------------------------------------------------------- vista: modelo */
+function vModelo(){
+  function ent(t,campos){
+    return '<div class="ent"><div class="eh">'+t+'</div><ul>'+campos.map(function(c){
+      if(c[1]==="sep") return '<li class="sep">'+c[0]+'</li>';
+      return '<li class="'+(c[1]||"")+'">'+c[0]+'</li>';}).join("")+'</ul></div>';
+  }
+  return '<div class="phead"><div><h1>Modelo de datos</h1>'+
+    '<div class="sub">Esquema rem · tres tablas para las dos áreas</div></div>'+
+    '<div class="asof">Versión 3</div></div>'+
+    '<div class="grid g3">'+
+      ent("rem.hallazgo",[["hallazgo_id (PK)","pk"],["area_origen (PK compuesta)","pk"],["codigo"],["ciclo"],
+        ["gerencia"],["subgerencia"],["subproceso"],["descripcion"],["criticidad"],["fecha_deteccion"],
+        ["SOLO RIESGOS Y CONTROL INTERNO","sep"],["tipo_impacto"],["severidad_inherente"],["resultado_evaluacion"],
+        ["SOLO REGULATORIA Y FRAUDE","sep"],["informe_codigo"],["informe_caso"],["recomendaciones_gerencia"]])+
+      ent("rem.plan",[["plan_id (PK)","pk"],["hallazgo_id (FK)","fk"],["area_origen (FK)","fk"],["num_plan"],
+        ["descripcion_plan"],["dueno"],["gerencia_responsable"],["fecha_recepcion_plan"],
+        ["fecha_compromiso_original"],["fecha_compromiso_vigente"],["fecha_cierre_declarado"],["estado"],
+        ["prorrogas"],["carpeta_evidencia"],["fecha_evidencia"],["resultado_certificacion"],
+        ["fecha_certificacion"]])+
+      ent("rem.catalogo",[["tipo (PK)","pk"],["valor (PK)","pk"],["activo"],
+        ["USO","sep"],["Lista única de valores permitidos"],["para gerencia, dueño, área"],
+        ["y estado. Alimenta las listas"],["desplegables del formulario."]])+
+    '</div>'+
+    '<div class="grid g2">'+
+      '<div class="card"><h2>Reglas que hace cumplir el motor</h2><div class="deff">'+
+      '<div><b>UNIQUE (area_origen, codigo, ciclo)</b><br>Evita colisión entre GR-CAP-02 e IA01-R01.</div>'+
+      '<div><b>FOREIGN KEY (hallazgo_id, area_origen)</b><br>Impide que un plan declare un área distinta '+
+      'a la de su hallazgo.</div>'+
+      '<div><b>Cardinalidad 1 : N en ambas áreas</b><br>Un hallazgo puede tener uno o varios planes.</div>'+
+      '<div><b>CHECK de coherencia</b><br>Un hallazgo de procesos exige resultado de evaluación; uno de '+
+      'fraude exige código de informe.</div>'+
+      '<div><b>CHECK de fechas</b><br>La fecha vigente nunca puede ser anterior a la original.</div>'+
+      '</div></div>'+
+      '<div class="card"><h2>Cómo se arman las llaves</h2><div class="deff">'+
+      '<div><b>plan_id</b> es común a las dos áreas: correlativo único dentro del esquema, independiente '+
+      'del hallazgo que lo originó.</div>'+
+      '<div><b>hallazgo_id</b> cambia de significado según el origen.</div></div>'+
+      '<div class="cols2" style="margin-top:14px">'+
+        '<div class="callout a"><h3>Riesgos y Control Interno</h3>'+
+        '<p>N° de control y/o N° de riesgo.<br><span class="mono">R-014</span> · riesgo evaluado<br>'+
+        '<span class="mono">GR-CAP-02</span> · control inefectivo</p></div>'+
+        '<div class="callout"><h3>Regulatoria y Fraude</h3>'+
+        '<p>ID del informe IA + N° de recomendación.<br><span class="mono">IA01-R01</span> · informe IA 01, '+
+        'recomendación 1<br><span class="mono">IA01-R02</span> · misma IA, segunda recomendación</p></div>'+
+      '</div>'+
+      '<div class="note">La llave primaria real del hallazgo es la pareja (hallazgo_id, area_origen). Eso '+
+      'permite que ambas nomenclaturas convivan sin chocar.</div></div>'+
+    '</div>';
+}
+
+/* ---------------------------------------------------------------- navegación */
+var SECCIONES=[
+  {id:"inicio",n:"00",t:"Inicio",render:vInicio},
+  {id:"remediacion",n:"01",t:"Planes de remediación",render:vRemediacion},
+  {id:"agentes",n:"02",t:"Agentes de ventas",render:vAgentes},
+  {id:"licencias",n:"03",t:"Emisores de licencias",render:vLicencias},
+  {id:"modelo",n:"04",t:"Modelo de datos",render:vModelo}
+];
+var actual=null;
+
+function navHTML(){
+  return SECCIONES.map(function(s){
+    return '<button type="button" role="tab" data-sec="'+s.id+'" aria-current="false">'+
+      '<span class="num">'+s.n+'</span><span>'+s.t+'</span></button>';}).join("");
+}
+
+function mostrar(id,push){
+  var s=SECCIONES.filter(function(x){return x.id===id;})[0]||SECCIONES[0];
+  if(actual===s.id) return;
+  actual=s.id;
+  SECCIONES.forEach(function(x){
+    var node=document.getElementById(x.id);
+    node.hidden=(x.id!==s.id);
+  });
+  var node=document.getElementById(s.id);
+  node.innerHTML=s.render();
+  if(s.id==="remediacion"){
+    document.getElementById("remfilters").innerHTML=remFiltros();
+    document.getElementById("remcontent").innerHTML=remContenido();
+  }
+  if(s.id==="agentes"){
+    document.getElementById("agres").innerHTML=agLista();
+    document.getElementById("agficha").innerHTML=agFicha();
+  }
+  if(s.id==="licencias"){
+    document.getElementById("emtabla").innerHTML=emTabla();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("#navlist button"),function(b){
+    b.setAttribute("aria-current",String(b.dataset.sec===s.id));});
+  if(push&&location.hash!=="#"+s.id){try{location.hash=s.id;}catch(e){}}
+  window.scrollTo(0,0);
+}
+
+document.getElementById("navlist").innerHTML=navHTML();
+
+document.addEventListener("click",function(ev){
+  var nb=ev.target.closest("#navlist button");
+  if(nb){mostrar(nb.dataset.sec,true);return;}
+  var go=ev.target.closest("[data-go]");
+  if(go){mostrar(go.dataset.go,true);return;}
+  var ar=ev.target.closest("[data-area]");
+  if(ar){fArea=ar.dataset.area;
+    document.getElementById("remfilters").innerHTML=remFiltros();
+    document.getElementById("remcontent").innerHTML=remContenido();return;}
+  var ag=ev.target.closest("[data-ag]");
+  if(ag){agSel=ag.dataset.ag;
+    document.getElementById("agres").innerHTML=agLista();
+    document.getElementById("agficha").innerHTML=agFicha();return;}
+  var th=ev.target.closest("th[data-sort]");
+  if(th){var k=th.dataset.sort;
+    if(emSort===k){emDir=-emDir;}else{emSort=k;emDir=(k==="cod"||k==="perf")?1:-1;}
+    document.getElementById("emtabla").innerHTML=emTabla();return;}
+  var tb=ev.target.closest("#themebtn");
+  if(tb){
+    var cur=document.documentElement.getAttribute("data-theme");
+    var dark=cur?cur==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.setAttribute("data-theme",dark?"light":"dark");
+    return;}
+});
+
+document.addEventListener("input",function(ev){
+  if(ev.target.id==="agq"){
+    agQuery=ev.target.value;
+    document.getElementById("agres").innerHTML=agLista();
+  }
+});
+document.addEventListener("change",function(ev){
+  if(ev.target.id==="fger"){
+    fGer=ev.target.value;
+    document.getElementById("remcontent").innerHTML=remContenido();
+  }
+});
+window.addEventListener("hashchange",function(){
+  var h=(location.hash||"").replace("#","");
+  if(h) mostrar(h,false);
+});
+
+var inicial=(location.hash||"").replace("#","");
+mostrar(SECCIONES.some(function(s){return s.id===inicial;})?inicial:"inicio",false);
+})();
+</script>
+</body>
+</html>
